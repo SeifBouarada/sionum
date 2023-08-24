@@ -1,6 +1,6 @@
 import Image from "next/image";
-import PostCard from "../../../../components/post-card/PostCard";
-import { Post } from "../../../../interfaces";
+import PostCard from "@/components/post-card/PostCard";
+import { Post } from "@/interfaces";
 import Link from "next/link";
 import moment from 'moment';
 
@@ -27,10 +27,10 @@ export default async function Category({ params, searchParams }: { params: { cat
             <div className="row mt-3">
                 {posts && posts.length ? posts.map((post: Post) => (
                     <div className="col-md-4 col-sm-6 p-1" key={post.slug}>
-                        <PostCard post={post} />
+                        <PostCard post={post} category={params.category} />
                     </div>
                 )) : <div className="col d-flex justify-content-center text-center">
-                    <Image src="/undraw_no_data_re_kwbl.svg" alt="no posts found" width={300} height={300} className="mt-5" />
+                    <Image src="/undraw-no-data-re-kwbl.svg" alt="no posts found" width={300} height={300} className="mt-5" />
                 </div>}
             </div>
             <div className="row mt-3">

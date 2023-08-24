@@ -1,15 +1,18 @@
 import { Post } from "@/interfaces";
 import Head from "next/head";
+import dotenv from "dotenv";
+dotenv.config();
 
 async function getPosts(slug?: string) {
-    let res = await fetch(`http://localhost:3000/api/posts?slug=${slug}`, { cache: 'force-cache' });
+    let res = await fetch(`${process.env.BASE_URL}/api/posts?slug=${slug}`, { cache: 'force-cache' });
     if (res.status !== 200) {
         return []
     }
     return res.json();
 }
-export default async function CategoryPostDetail({ params }: { params: { slug: string } }) {
+export default async function PostDetail({ params }: { params: { slug: string } }) {
     const post: Post = await getPosts(params.slug);
+
     function addPostJsonLd() {
         return {
             __html: `
@@ -41,6 +44,7 @@ export default async function CategoryPostDetail({ params }: { params: { slug: s
             `
         }
     }
+
     return (
         <>
             <Head>
@@ -49,11 +53,6 @@ export default async function CategoryPostDetail({ params }: { params: { slug: s
                 <meta property="og:title" content={post.title} />
                 <meta property="og:description" content={post.description} />
                 <meta property="og:image" content={post.thumbnail || '/assets/img/default.jpeg'} />
-                <meta property="og:image:secure_url" content={post.thumbnail || '/assets/img/default.jpeg'} />
-                <meta property="og:image:type" content="image/jpeg" />
-                <meta property="og:image:width" content="500" />
-                <meta property="og:image:height" content="500" />
-                <meta property="og:image:alt" content={post.title} />
                 <meta property="og:url" content={`${process.env.BASE_URL}`} />
                 <meta property="og:site_name" content="Sionum" />
                 <meta property="og:type" content="article" />

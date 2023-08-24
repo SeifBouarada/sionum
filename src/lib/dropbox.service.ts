@@ -1,4 +1,4 @@
-import { Error, Post } from '../../interfaces';
+import { Error, Post } from '@/interfaces';
 import * as Dropbox from 'dropbox';
 import dotenv from "dotenv";
 dotenv.config();

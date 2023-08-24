@@ -1,28 +1,19 @@
 import './globals.css'
-import type { Metadata } from 'next'
-import { Inter, Roboto } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 import Head from "next/head";
-// import Script from 'next/script';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from '../../components/header/Navbar';
+import Navbar from '@/components/header/Navbar';
 const roboto = Roboto({
   subsets: ['latin'],
   weight: '500',
   display: 'swap',
   variable: '--font-teko',
 });
-import Footer from '../../components/footer/Footer';
+import Footer from '@/components/footer/Footer';
 import Script from 'next/script';
 
-export const metadata: Metadata = {
-  title: 'Sionum.org - Your Source for Trending News and Blogs',
-  description: 'Discover the latest trends and news on Sionum.org. Stay informed about the most relevant and innovative topics in fashion, technology, culture, and more.',
-  keywords: 'Trending news, blog, fashion, technology, culture, trends, innovation, news articles',
-  authors: {
-    name: 'SIONUM Inc.',
-    url: 'https://sionum.org',
-  },
-}
+
 
 export default function RootLayout({
   children,
@@ -32,11 +23,32 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
+        <Script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7389774506228182" crossOrigin='anonymous'></Script>
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-0NVWRGHXDR"></Script>
+        <Script strategy="lazyOnload">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+
+            gtag('config', 'G-0NVWRGHXDR');
+        `}
+        </Script>
+        <Script type='text/javascript' strategy="lazyOnload">
+          {`
+           (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+          })(window, document, "clarity", "script", "ie4pgxe371");
+        `}
+        </Script>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
       <body className={roboto.className}>
         <Navbar />
-        <div className="container mt-5 mb-5">
+        <div className="container mt-5" style={{marginBottom: '5rem'}}>
           {children}
         </div>
         <Footer />
