@@ -1,95 +1,48 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import Image from "next/image";
+import PostCard from "../../components/post-card/PostCard";
+import { Post } from "../../interfaces";
+import moment from 'moment';
+import Link from "next/link";
 
-export default function Home() {
+async function getPosts(date?: string) {
+  let res = await fetch(`http://localhost:3000/api/posts?date=${date}`, { cache: 'force-cache' });
+  if (res.status !== 200) {
+    return []
+  }
+  return res.json();
+}
+
+export default async function Home({searchParams}: {searchParams: any}) {
+
+  let invisible = false;
+  let current = searchParams.page || 0;
+  let posts: any = await getPosts(moment().subtract(current, 'days').format('YYYY-MM-DD'));
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      <div className="row">
+        <div className="col mt-5 border-bottom border-black">
+          <h1>
+            The latest trends
+          </h1>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className="row mt-3">
+        {posts && posts.length ? posts.map((post: Post) => (
+          <div className="col-md-4 col-sm-6 p-1" key={post.slug}>
+            <PostCard post={post} />
+          </div>
+        )) : <div className="col d-flex justify-content-center text-center">
+          <Image src="/undraw_no_data_re_kwbl.svg" alt="no posts found" width={300} height={300} className="mt-5" />
+        </div>}
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className="row mt-3 mb-5">
+        <div className="col d-flex justify-content-center">
+          <Link href={`/?page=${Number(current) + 1}`}>
+            <button className={`btn btn btn-light text-blod ${invisible ? 'invisible' : ''}`}>Show More</button>
+          </Link>
+        </div>
       </div>
-    </main>
+    </>
   )
 }
